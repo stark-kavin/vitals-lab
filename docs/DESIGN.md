@@ -107,11 +107,22 @@ Metric values use a _strip gauge_: a short horizontal scale divided into good / 
 
 The loading state reuses the dial: the needle hunts back and forth like a meter settling, with an elapsed timer and rotating stage labels marked as indicative. No fake percentage.
 
+## Premium layer (v1.1)
+
+- **Texture**: a faint 24px graph-paper grid (`--grid`) behind the top of every page, fading out after ~720px.
+- **Depth**: plates carry `--shadow-plate` (a top highlight plus a soft drop); interactive cards lift with `--shadow-lift`.
+- **Icon tiles**: every section heading has a 40px tile with a Lucide icon in `--signal`. Each metric has its own glyph (`METRIC_ICON`).
+- **Hero instrument**: the home page shows an inline-SVG bench instrument (dial, readouts, filmstrip, scope trace) on md+ screens. It's decorative (`aria-hidden`) and costs no network requests.
+- **Report**: a verdict card with a rating-colored rail, a sticky "On this page" navigator in the rail, and savings bars on each opportunity.
+- **Header**: sticky, with a translucent blurred panel color.
+
 ## Motion
 
-- One orchestrated moment: when a report arrives, the dials sweep in sequence (80ms stagger). Other sections simply appear.
+- One orchestrated moment per page: on the home page the hero needle sweeps to its reading and the readouts rise in; on a report the dials sweep in sequence (80ms stagger).
+- Report sections below the fold fade up once as they scroll into view (`useReveal`).
+- Hover: rows show a signal-colored edge, cards lift 2px, a button's leading icon nudges.
 - Motion that answers a user action is welcome: expanding an audit, switching field data scope, toggling theme.
-- `prefers-reduced-motion: reduce` disables the sweep, count-up, needle hunting and all transitions.
+- `prefers-reduced-motion: reduce` disables the sweep, count-up, needle hunting, scroll reveals, hero animation and all transitions; delays are zeroed so nothing waits to appear.
 
 ## Voice
 

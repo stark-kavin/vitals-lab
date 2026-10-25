@@ -20,6 +20,11 @@
   --warn-soft: #f1dfc3;
   --poor-soft: #f2d3cf;
 
+  --grid: rgb(30 37 42 / 0.055);
+  --shadow-plate:
+    0 1px 0 rgb(255 255 255 / 0.7) inset, 0 1px 2px rgb(30 37 42 / 0.06),
+    0 8px 24px -16px rgb(30 37 42 / 0.25);
+  --shadow-lift: 0 1px 2px rgb(30 37 42 / 0.08), 0 16px 32px -18px rgb(30 37 42 / 0.4);
   --shadow-float: 0 12px 32px -12px rgb(20 26 30 / 0.35), 0 2px 6px -2px rgb(20 26 30 / 0.2);
 }
 
@@ -35,6 +40,9 @@
   --signal-ink: #141a1e;
   --signal-soft: #2a3364;
   --bezel: #2e383f;
+  --grid: rgb(228 232 229 / 0.04);
+  --shadow-plate: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 30px -18px rgb(0 0 0 / 0.8);
+  --shadow-lift: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 18px 36px -18px rgb(0 0 0 / 0.9);
 
   --good: #53c88f;
   --warn: #f2a64a;
@@ -59,6 +67,9 @@
     --signal-ink: #141a1e;
     --signal-soft: #2a3364;
     --bezel: #2e383f;
+    --grid: rgb(228 232 229 / 0.04);
+    --shadow-plate: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 30px -18px rgb(0 0 0 / 0.8);
+    --shadow-lift: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 18px 36px -18px rgb(0 0 0 / 0.9);
 
     --good: #53c88f;
     --warn: #f2a64a;

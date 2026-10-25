@@ -54,8 +54,11 @@ describe('report model', () => {
 
   it('writes a plain-language summary', () => {
     const lines = summarize(report)
-    expect(lines[0]).toMatch(/loads slowly on a mid-range phone/)
-    expect(lines.join(' ')).toMatch(/biggest win/)
+    expect(lines[0]).toEqual({
+      kind: 'speed',
+      text: expect.stringMatching(/loads slowly on a mid-range phone/),
+    })
+    expect(lines.map((l) => l.kind)).toEqual(['speed', 'metric', 'win', 'field'])
   })
 
   it('builds a plain-text summary without secrets', () => {

@@ -1,6 +1,7 @@
 import { Users } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { InfoPopover } from '@/components/shared/InfoPopover'
+import { METRIC_ICON } from '@/components/shared/metric-icons'
 import { RatingMark } from '@/components/shared/RatingBadge'
 import { ratingTextClass } from '@/components/shared/rating-classes'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
@@ -11,6 +12,7 @@ import type { Report } from '@/lib/psi-types'
 import { formatMetric } from '@/lib/report-model'
 import { METRIC_THRESHOLDS } from '@/lib/ratings'
 import { Section } from './Section'
+import { SECTION_META } from './sections'
 
 type Scope = 'url' | 'origin'
 
@@ -23,6 +25,7 @@ export function FieldData({ report }: { report: Report }) {
   return (
     <Section
       id="field"
+      icon={SECTION_META.field?.icon}
       title="Real visitors"
       intro={
         <>
@@ -93,6 +96,7 @@ export function FieldData({ report }: { report: Report }) {
 
 function FieldRow({ metric }: { metric: FieldMetric }) {
   const info = METRIC_INFO[metric.id]
+  const MetricIcon = METRIC_ICON[metric.id]
   const d = metric.distribution
   const t = METRIC_THRESHOLDS[metric.id]
   const unit = (v: number) => formatMetric(metric.id, v)
@@ -103,9 +107,15 @@ function FieldRow({ metric }: { metric: FieldMetric }) {
   ]
 
   return (
-    <li className="grid gap-x-6 gap-y-3 px-5 py-4 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]">
+    <li className="grid gap-x-6 gap-y-3 px-5 py-4 md:grid-cols-[minmax(0,18rem)_minmax(0,1fr)]">
       <div>
         <p className="flex items-center gap-1">
+          <span
+            aria-hidden
+            className="mr-1 flex size-6 items-center justify-center rounded-[6px] bg-well text-signal"
+          >
+            <MetricIcon className="size-3.5" />
+          </span>
           <span className="font-label text-ink">{info.name}</span>
           <span className="num-narrow text-[0.75rem] text-ink-2">{metric.id}</span>
           <InfoPopover title={info.name}>

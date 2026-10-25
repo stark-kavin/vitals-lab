@@ -1,4 +1,4 @@
-import { Monitor, RotateCw, Smartphone, X } from 'lucide-react'
+import { History, Monitor, RotateCw, Smartphone, X } from 'lucide-react'
 import { useMemo } from 'react'
 import { useSettings } from '@/app/settings-context'
 import { RatingMark } from '@/components/shared/RatingBadge'
@@ -22,27 +22,38 @@ export function Logbook({
 
   return (
     <section aria-labelledby="logbook-title">
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 id="logbook-title" className="font-display text-2xl">
-          Recent tests
-        </h2>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <span className="icon-tile" aria-hidden>
+            <History className="size-5" strokeWidth={1.9} />
+          </span>
+          <div>
+            <h2 id="logbook-title" className="font-display text-2xl">
+              Recent tests
+            </h2>
+            <p className="text-sm text-ink-2">Saved in this browser only.</p>
+          </div>
+        </div>
         {groups.length > 0 && (
-          <span className="num-narrow text-sm text-ink-2">
+          <span className="num-narrow rounded-full bg-well px-2.5 py-1 text-sm text-ink-2">
             {history.length} run{history.length === 1 ? '' : 's'} saved
           </span>
         )}
       </div>
 
       {groups.length === 0 ? (
-        <div className="mt-4 rounded-plate border border-dashed border-edge px-5 py-8 text-ink-2">
-          <p className="text-ink">Nothing logged yet.</p>
-          <p className="mt-1 max-w-sm text-[0.9375rem]">
-            Each test you run is listed here with its scores, so you can re-run it and watch the
-            trend. The log lives only in this browser.
-          </p>
+        <div className="mt-5 flex flex-col items-center gap-5 rounded-plate border border-dashed border-edge px-5 py-8 text-center text-ink-2 sm:flex-row sm:text-left">
+          <EmptyLogArt className="w-36 shrink-0" />
+          <div>
+            <p className="font-label text-lg text-ink">Nothing logged yet</p>
+            <p className="mt-1 max-w-md text-[0.9375rem]">
+              Each test you run is listed here with its scores, so you can re-run it and watch the
+              trend over time.
+            </p>
+          </div>
         </div>
       ) : (
-        <ol className="mt-3 divide-y divide-rule border-y border-rule">
+        <ol className="mt-5 grid border-t border-rule lg:grid-cols-2 lg:gap-x-10">
           {groups.slice(0, 12).map((g) => (
             <LogRow
               key={`${g.strategy}|${g.url}`}
@@ -75,7 +86,7 @@ function LogRow({
   const time = new Date(group.latest.timestamp)
 
   return (
-    <li className="grid grid-cols-[3rem_1fr_auto] items-center gap-x-3 gap-y-1 py-3">
+    <li className="row-hover grid grid-cols-[3rem_1fr_auto] items-center gap-x-3 gap-y-1 border-b border-rule py-3 pl-3">
       <span
         className={`num row-span-2 text-2xl leading-none ${ratingTextClass(rating)}`}
         aria-hidden
@@ -126,5 +137,33 @@ function LogRow({
         {group.trend.length > 1 && <Sparkline values={group.trend.slice(-10)} />}
       </div>
     </li>
+  )
+}
+
+/** Empty logbook: a ruled page with a small dial waiting for its first reading. */
+function EmptyLogArt({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 150 110" className={className} aria-hidden>
+      <rect x="18" y="8" width="96" height="94" rx="8" fill="var(--plate)" stroke="var(--rule)" />
+      <rect x="18" y="8" width="96" height="18" rx="8" fill="var(--well)" />
+      {[38, 52, 66, 80].map((y, i) => (
+        <g key={y} opacity={1 - i * 0.2}>
+          <rect x="30" y={y} width="10" height="6" rx="2" fill="var(--rule)" />
+          <rect x="46" y={y} width={52 - i * 8} height="6" rx="2" fill="var(--rule)" />
+        </g>
+      ))}
+      <g transform="translate(112 74)">
+        <circle r="26" fill="var(--plate)" stroke="var(--rule)" />
+        <path
+          d="M -17 10 A 20 20 0 1 1 17 10"
+          fill="none"
+          stroke="var(--ink-2)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <path d="M 0 0 L -9 -12" stroke="var(--signal)" strokeWidth="3" strokeLinecap="round" />
+        <circle r="3.5" fill="var(--ink)" />
+      </g>
+    </svg>
   )
 }

@@ -1,4 +1,4 @@
-import { Monitor, Smartphone } from 'lucide-react'
+import { Monitor, Smartphone, SplitSquareHorizontal } from 'lucide-react'
 import { Dial } from '@/components/gauge/Dial'
 import { ratingTextClass } from '@/components/shared/rating-classes'
 import { METRIC_INFO } from '@/lib/metric-info'
@@ -35,6 +35,7 @@ export function CompareView({ mobile, desktop }: { mobile: Report; desktop: Repo
   return (
     <Section
       id="compare"
+      icon={SplitSquareHorizontal}
       title="Mobile and desktop side by side"
       intro="Mobile is tested on a slower simulated device and network, so it almost always scores lower. Deltas show desktop relative to mobile."
     >

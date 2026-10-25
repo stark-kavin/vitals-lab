@@ -10,12 +10,15 @@ import {
 } from '@/lib/report-model'
 import { AuditItem } from './AuditItem'
 import { Collapsible, Section } from './Section'
+import { SECTION_META } from './sections'
+import { CircleCheck } from 'lucide-react'
 
 export function Opportunities({ report }: { report: Report }) {
   const [filter, setFilter] = useState<FilterMetric | 'all'>('all')
   const all = useMemo(() => getOpportunities(report), [report])
   const shown = useMemo(() => getOpportunities(report, filter), [report, filter])
   const passed = useMemo(() => getPassedPerformanceAudits(report), [report])
+  const maxSavings = Math.max(0, ...all.map((o) => o.savingsMs))
   const counts = useMemo(() => {
     const c: Record<string, number> = { all: all.length }
     for (const m of FILTER_METRICS) c[m] = all.filter((o) => o.metrics.includes(m)).length
@@ -27,6 +30,7 @@ export function Opportunities({ report }: { report: Report }) {
   return (
     <Section
       id="opportunities"
+      icon={SECTION_META.opportunities?.icon}
       title="What to fix first"
       intro="Performance audits that didn’t pass, biggest estimated time savings first. Savings are Google’s estimates for this one test."
     >
@@ -61,12 +65,18 @@ export function Opportunities({ report }: { report: Report }) {
       ) : (
         <ul className="mt-4 divide-y divide-rule border-y border-rule">
           {shown.map((o) => (
-            <AuditItem key={o.audit.id} audit={o.audit} badge={savingsLabel(o)} tags={o.metrics} />
+            <AuditItem
+              key={o.audit.id}
+              audit={o.audit}
+              badge={savingsLabel(o)}
+              tags={o.metrics}
+              meter={maxSavings > 0 ? o.savingsMs / maxSavings : undefined}
+            />
           ))}
         </ul>
       )}
 
-      <Collapsible summary="Passed performance audits" count={passed.length}>
+      <Collapsible summary="Passed performance audits" count={passed.length} icon={CircleCheck}>
         <ul className="divide-y divide-rule">
           {passed.map((a) => (
             <AuditItem key={a.id} audit={a} />

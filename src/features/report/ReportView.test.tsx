@@ -88,7 +88,7 @@ describe('ReportView with the sample fixture', () => {
     renderReport()
     const a11y = screen.getByRole('region', { name: 'Accessibility' })
     expect(within(a11y).getByText('Passed audits')).toBeInTheDocument()
-    expect(within(a11y).getByText('(15)')).toBeInTheDocument()
+    expect(within(a11y).getByText('15')).toBeInTheDocument()
   })
 
   it('shows a compare view when both strategies ran', async () => {

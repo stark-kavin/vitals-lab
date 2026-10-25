@@ -1,6 +1,7 @@
 import { formatMs } from '@/lib/format'
 import type { Report } from '@/lib/psi-types'
 import { Section } from './Section'
+import { SECTION_META } from './sections'
 
 interface Frame {
   timing: number
@@ -29,6 +30,7 @@ export function Filmstrip({ report }: { report: Report }) {
   return (
     <Section
       id="filmstrip"
+      icon={SECTION_META.filmstrip?.icon}
       title="How it loaded"
       intro="Frames captured during the lab test. Look for long stretches of blank screen and for content that appears late."
     >

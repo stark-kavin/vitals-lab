@@ -248,24 +248,35 @@ function lowerFirst(s: string): string {
   return second && second !== second.toUpperCase() ? first.toLowerCase() + s.slice(1) : s
 }
 
-export function summarize(report: Report): string[] {
-  const lines: string[] = []
+export type SummaryKind = 'speed' | 'metric' | 'win' | 'field'
+export interface SummaryLine {
+  kind: SummaryKind
+  text: string
+}
+
+export function summarize(report: Report): SummaryLine[] {
+  const lines: SummaryLine[] = []
   const device = report.strategy === 'mobile' ? 'on a mid-range phone' : 'on desktop'
   const perf = categoryScore(report, 'performance')
   const rating = rateScore(perf)
 
-  if (rating === 'good') lines.push(`This page loads quickly ${device}.`)
+  if (rating === 'good') lines.push({ kind: 'speed', text: `This page loads quickly ${device}.` })
   else if (rating === 'needs-work')
-    lines.push(`This page loads at a middling pace ${device}; there’s room to improve.`)
-  else if (rating === 'poor') lines.push(`This page loads slowly ${device}.`)
+    lines.push({
+      kind: 'speed',
+      text: `This page loads at a middling pace ${device}; there’s room to improve.`,
+    })
+  else if (rating === 'poor')
+    lines.push({ kind: 'speed', text: `This page loads slowly ${device}.` })
 
   const worst = getLabMetrics(report)
     .filter((m) => m.rating === 'poor' && m.id !== 'TTI')
     .sort((a, b) => ratioOver(b) - ratioOver(a))[0]
   if (worst) {
-    lines.push(
-      `${METRIC_INFO[worst.id].name} is ${worst.display}, well past the ${formatMetric(worst.id, thresholdGood(worst.id))} target.`,
-    )
+    lines.push({
+      kind: 'metric',
+      text: `${METRIC_INFO[worst.id].name} is ${worst.display}, well past the ${formatMetric(worst.id, thresholdGood(worst.id))} target.`,
+    })
   }
 
   const top = getOpportunities(report)[0]
@@ -276,16 +287,18 @@ export function summarize(report: Report): string[] {
         : top.savingsBytes >= 1024
           ? ` (could save about ${formatBytes(top.savingsBytes)})`
           : ''
-    lines.push(`The biggest win: ${lowerFirst(top.audit.title)}${extra}.`)
+    lines.push({ kind: 'win', text: `The biggest win: ${lowerFirst(top.audit.title)}${extra}.` })
   }
 
   const field = parseCrux(report.loadingExperience)
   if (field && field.coreWebVitals !== 'unknown') {
-    lines.push(
-      field.coreWebVitals === 'passed'
-        ? 'Real visitors over the last 28 days pass the Core Web Vitals.'
-        : 'Real visitors over the last 28 days don’t pass the Core Web Vitals yet.',
-    )
+    lines.push({
+      kind: 'field',
+      text:
+        field.coreWebVitals === 'passed'
+          ? 'Real visitors over the last 28 days pass the Core Web Vitals.'
+          : 'Real visitors over the last 28 days don’t pass the Core Web Vitals yet.',
+    })
   }
   return lines
 }
@@ -342,7 +355,7 @@ export function plainTextSummary(report: Report): string {
   const summary = summarize(report)
   if (summary.length) {
     out.push('')
-    out.push(summary.join(' '))
+    out.push(summary.map((l) => l.text).join(' '))
   }
   return out.join('\n')
 }

@@ -28,10 +28,13 @@ export function AuditItem({
   audit,
   badge,
   tags,
+  meter,
 }: {
   audit: Audit
   badge?: string | null
   tags?: string[]
+  /** 0-1: size of this audit's saving relative to the biggest one, drawn as a bar. */
+  meter?: number
 }) {
   // Details tables can be large; only render them once opened.
   const [open, setOpen] = useState(false)
@@ -42,7 +45,7 @@ export function AuditItem({
       <details className="group" onToggle={(e) => setOpen(e.currentTarget.open)}>
         <summary
           className={cn(
-            'grid cursor-pointer list-none grid-cols-[auto_1fr_auto] items-start gap-x-3 gap-y-1 rounded-control px-2 py-3 transition-colors hover:bg-well [&::-webkit-details-marker]:hidden',
+            'row-hover grid cursor-pointer list-none grid-cols-[auto_1fr_auto] items-start gap-x-3 gap-y-1 rounded-control py-3 pr-2 pl-3 hover:bg-well [&::-webkit-details-marker]:hidden',
           )}
         >
           <span className="mt-0.5">
@@ -61,6 +64,17 @@ export function AuditItem({
                     {t}
                   </span>
                 ))}
+              </span>
+            )}
+            {meter != null && meter > 0 && (
+              <span
+                aria-hidden
+                className="mt-2 block h-1 w-full max-w-sm overflow-hidden rounded-full bg-well"
+              >
+                <span
+                  className="block h-full rounded-full bg-[linear-gradient(90deg,var(--signal),color-mix(in_oklab,var(--signal)_55%,var(--plate)))]"
+                  style={{ width: `${Math.max(4, Math.round(meter * 100))}%` }}
+                />
               </span>
             )}
           </span>

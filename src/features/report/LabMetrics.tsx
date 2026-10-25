@@ -1,6 +1,6 @@
-import { FlaskConical } from 'lucide-react'
 import { StripGauge } from '@/components/gauge/StripGauge'
 import { InfoPopover } from '@/components/shared/InfoPopover'
+import { METRIC_ICON } from '@/components/shared/metric-icons'
 import { RatingMark } from '@/components/shared/RatingBadge'
 import { ratingTextClass } from '@/components/shared/rating-classes'
 import { METRIC_INFO } from '@/lib/metric-info'
@@ -8,6 +8,7 @@ import type { Report } from '@/lib/psi-types'
 import { formatMetric, getLabMetrics } from '@/lib/report-model'
 import { METRIC_THRESHOLDS } from '@/lib/ratings'
 import { Section } from './Section'
+import { SECTION_META } from './sections'
 
 export function LabMetrics({ report }: { report: Report }) {
   const metrics = getLabMetrics(report)
@@ -18,10 +19,10 @@ export function LabMetrics({ report }: { report: Report }) {
   return (
     <Section
       id="lab"
+      icon={SECTION_META.lab?.icon}
       title="Lab test"
       intro={
         <>
-          <FlaskConical className="mr-1.5 inline size-4 align-[-2px]" aria-hidden />
           One simulated visit on {device}. Lab numbers vary a little from run to run; use them to
           find causes, and the field data above to judge real experience.
         </>
@@ -30,10 +31,17 @@ export function LabMetrics({ report }: { report: Report }) {
       <ul className="grid gap-px overflow-hidden rounded-plate border border-rule bg-rule sm:grid-cols-2">
         {metrics.map((m) => {
           const info = METRIC_INFO[m.id]
+          const MetricIcon = METRIC_ICON[m.id]
           const t = METRIC_THRESHOLDS[m.id]
           return (
             <li key={m.id} className="flex flex-col bg-plate px-5 py-4">
               <p className="flex items-center gap-1">
+                <span
+                  aria-hidden
+                  className="mr-1 flex size-6 items-center justify-center rounded-[6px] bg-well text-signal"
+                >
+                  <MetricIcon className="size-3.5" />
+                </span>
                 <span className="font-label text-ink">{info.name}</span>
                 <span className="num-narrow text-[0.75rem] text-ink-2">{m.id}</span>
                 <InfoPopover title={info.name}>

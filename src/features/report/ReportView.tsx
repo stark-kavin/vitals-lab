@@ -15,7 +15,9 @@ import { LabMetrics } from './LabMetrics'
 import { Opportunities } from './Opportunities'
 import { ReportActions } from './ReportActions'
 import { ScorePanel } from './ScorePanel'
+import { SectionNav } from './SectionNav'
 import { Specimen } from './Specimen'
+import { Verdict } from './Verdict'
 
 type View = Strategy | 'compare'
 const OTHER_CATEGORIES: CategoryId[] = ['accessibility', 'best-practices', 'seo']
@@ -132,7 +134,7 @@ function SingleReport({
 
   return (
     <div className="grid gap-10 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14">
-      <aside aria-label="Test details" className="lg:sticky lg:top-6 lg:self-start">
+      <aside aria-label="Test details" className="lg:sticky lg:top-24 lg:self-start">
         <Specimen report={report}>
           <ReportActions
             report={report}
@@ -142,14 +144,22 @@ function SingleReport({
             shareStrategy={shareStrategy}
           />
         </Specimen>
+        <div className="mt-8">
+          <SectionNav report={report} />
+        </div>
       </aside>
 
-      <div className="min-w-0 space-y-14">
+      <div className="min-w-0 space-y-16">
         <header>
-          <p className="text-ink-2">
+          <p className="inline-flex items-center gap-2 rounded-full border border-rule bg-plate px-3 py-1 text-sm text-ink-2">
+            {report.strategy === 'mobile' ? (
+              <Smartphone className="size-3.5" aria-hidden />
+            ) : (
+              <Monitor className="size-3.5" aria-hidden />
+            )}
             {report.strategy === 'mobile' ? 'Mobile' : 'Desktop'} report for
           </p>
-          <h1 className="font-display mt-1 text-[2.25rem] [overflow-wrap:anywhere] sm:text-5xl">
+          <h1 className="font-display mt-3 text-[2.25rem] [overflow-wrap:anywhere] sm:text-5xl">
             {splitUrl(report.finalUrl).host}
           </h1>
           {splitUrl(report.finalUrl).rest && (
@@ -157,14 +167,8 @@ function SingleReport({
               {splitUrl(report.finalUrl).rest}
             </p>
           )}
-          {summary.length > 0 && (
-            <div className="mt-5 max-w-[62ch] space-y-2 text-lg leading-relaxed text-ink sm:text-xl">
-              {summary.map((line) => (
-                <p key={line}>{line}</p>
-              ))}
-            </div>
-          )}
         </header>
+        <Verdict report={report} lines={summary} />
 
         <ScorePanel report={report} />
         <FieldData report={report} />

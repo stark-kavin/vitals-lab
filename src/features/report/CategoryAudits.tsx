@@ -8,6 +8,8 @@ import { categoryScore, getCategory, groupCategoryAudits } from '@/lib/report-mo
 import { rateScore } from '@/lib/ratings'
 import { AuditItem } from './AuditItem'
 import { Collapsible, Section } from './Section'
+import { SECTION_META } from './sections'
+import { CircleCheck, CircleMinus, Hand } from 'lucide-react'
 
 export function CategoryAudits({ report, id }: { report: Report; id: CategoryId }) {
   const category = getCategory(report, id)
@@ -20,6 +22,7 @@ export function CategoryAudits({ report, id }: { report: Report; id: CategoryId 
   return (
     <Section
       id={`cat-${id}`}
+      icon={SECTION_META[`cat-${id}`]?.icon}
       title={category.title}
       intro={CATEGORY_INFO[id]?.blurb}
       aside={
@@ -56,14 +59,14 @@ export function CategoryAudits({ report, id }: { report: Report; id: CategoryId 
       )}
 
       <div className="mt-4">
-        <Collapsible summary="Passed audits" count={grouped.passed.length}>
+        <Collapsible summary="Passed audits" count={grouped.passed.length} icon={CircleCheck}>
           <ul className="divide-y divide-rule">
             {grouped.passed.map((a) => (
               <AuditItem key={a.id} audit={a} />
             ))}
           </ul>
         </Collapsible>
-        <Collapsible summary="Check these by hand" count={grouped.manual.length}>
+        <Collapsible summary="Check these by hand" count={grouped.manual.length} icon={Hand}>
           {category.manualDescription && (
             <p className="px-2 pb-2 text-sm text-ink-2">
               <MarkdownLite text={category.manualDescription} />
@@ -75,7 +78,11 @@ export function CategoryAudits({ report, id }: { report: Report; id: CategoryId 
             ))}
           </ul>
         </Collapsible>
-        <Collapsible summary="Not applicable to this page" count={grouped.notApplicable.length}>
+        <Collapsible
+          summary="Not applicable to this page"
+          count={grouped.notApplicable.length}
+          icon={CircleMinus}
+        >
           <ul className="divide-y divide-rule">
             {grouped.notApplicable.map((a) => (
               <AuditItem key={a.id} audit={a} />

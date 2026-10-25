@@ -72,7 +72,12 @@
 
   body {
     min-height: 100dvh;
-    background: var(--panel);
+    /* Faint graph-paper grid, fading out down the page: the bench the page is measured on. */
+    background:
+      linear-gradient(to bottom, transparent 0, var(--panel) 720px) no-repeat,
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 24px 24px,
+      var(--panel);
     font-family: var(--font-sans);
     font-size: 1rem;
     line-height: 1.55;
@@ -152,6 +157,76 @@
     background: var(--plate);
     border: 1px solid var(--rule);
     border-radius: var(--radius-plate);
+    box-shadow: var(--shadow-plate);
+  }
+
+  /* Square icon tile that heads each section, like a labelled control on a panel. */
+  .icon-tile {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    color: var(--signal);
+    background: linear-gradient(160deg, var(--plate), var(--well));
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-plate);
+  }
+
+  /* Rows that respond to the pointer with a signal-colored edge. */
+  .row-hover {
+    position: relative;
+    transition: background-color 160ms ease;
+  }
+  .row-hover::before {
+    content: '';
+    position: absolute;
+    inset: 8px auto 8px 0;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--signal);
+    transform: scaleY(0);
+    transition: transform 180ms ease;
+  }
+  .row-hover:hover::before,
+  .row-hover:focus-within::before {
+    transform: scaleY(1);
+  }
+
+  /* Gentle lift for cards that are links or buttons. */
+  .lift {
+    transition:
+      transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 180ms ease,
+      border-color 180ms ease;
+  }
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--edge);
+  }
+
+  /* Scroll reveal: added by useReveal; content is visible by default if JS or IO is missing. */
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .reveal-in {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 520ms ease-out,
+      transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Buttons: the leading icon nudges on hover. */
+  [data-slot='button']:hover > svg:first-child {
+    transform: translateX(1px) rotate(-6deg);
+  }
+  [data-slot='button'] > svg {
+    transition: transform 180ms ease;
   }
   .well {
     background: var(--well);
@@ -230,11 +305,62 @@
   animation: vl-blink 1.2s ease-in-out infinite;
 }
 
+/* Home hero instrument: needle sweeps to its reading, overshoots, settles, then idles. */
+@keyframes vl-hero-sweep {
+  0% {
+    transform: rotate(-120deg);
+  }
+  65% {
+    transform: rotate(117deg);
+  }
+  82% {
+    transform: rotate(107deg);
+  }
+  100% {
+    transform: rotate(110.4deg);
+  }
+}
+@keyframes vl-hero-idle {
+  0%,
+  100% {
+    transform: rotate(110.4deg);
+  }
+  50% {
+    transform: rotate(108.6deg);
+  }
+}
+@keyframes vl-hero-scroll {
+  to {
+    transform: translateX(-240px);
+  }
+}
+@keyframes vl-hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.vl-hero-needle {
+  animation:
+    vl-hero-sweep 1.7s cubic-bezier(0.25, 0.8, 0.25, 1) both,
+    vl-hero-idle 3.2s ease-in-out 1.7s infinite;
+}
+.vl-hero-trace {
+  animation: vl-hero-scroll 7s linear infinite;
+}
+.vl-hero-chip {
+  animation: vl-hero-rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.vl-hero-readout {
+  animation: vl-fade-in 500ms ease-out 1.3s both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;

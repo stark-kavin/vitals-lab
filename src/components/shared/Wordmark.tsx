@@ -17,7 +17,9 @@ export function Wordmark() {
   return (
     <span className="inline-flex items-center gap-2 text-ink">
       <DialGlyph className="size-7" />
-      <span className="font-display text-[1.375rem] tracking-tight">Vitals Lab</span>
+      <span className="font-display text-[1.375rem] tracking-tight whitespace-nowrap">
+        Vitals Lab
+      </span>
     </span>
   )
 }

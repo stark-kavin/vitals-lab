@@ -1,4 +1,14 @@
-import { Monitor, Moon, Smartphone, Sun, SunMoon } from 'lucide-react'
+import {
+  Check,
+  Database,
+  Monitor,
+  Moon,
+  ShieldCheck,
+  SlidersHorizontal,
+  Smartphone,
+  Sun,
+  SunMoon,
+} from 'lucide-react'
 import { useId, useState, type ReactNode } from 'react'
 import { useSettings } from '@/app/settings-context'
 import { ConfirmButton } from '@/components/shared/ConfirmButton'
@@ -38,6 +48,13 @@ const LOCALES: { value: string; label: string }[] = [
   { value: 'zh-TW', label: '中文（繁體）' },
 ]
 
+const PRIVACY_POINTS = [
+  'Your key never leaves this browser except inside requests to googleapis.com.',
+  'It is never put in share links, history, downloaded JSON, page text, logs or error messages.',
+  'The page address you test is sent to Google, which loads it from its own servers.',
+  'No analytics, no trackers, no third-party scripts or fonts.',
+]
+
 export default function SettingsPage() {
   const { settings, updateSettings, history, clearHistory, apiKey, removeApiKey, resetAll } =
     useSettings()
@@ -58,9 +75,14 @@ export default function SettingsPage() {
           <ApiKeyPanel />
 
           <section aria-labelledby="defaults-title" className="plate p-5 sm:p-7">
-            <h2 id="defaults-title" className="font-display text-[1.75rem]">
-              Defaults
-            </h2>
+            <div className="flex items-center gap-3.5">
+              <span className="icon-tile" aria-hidden>
+                <SlidersHorizontal className="size-5" strokeWidth={1.9} />
+              </span>
+              <h2 id="defaults-title" className="font-display text-[1.75rem]">
+                Defaults
+              </h2>
+            </div>
             <p className="mt-1 text-ink-2">
               Used to prefill the test form. You can still change them per test.
             </p>
@@ -144,26 +166,33 @@ export default function SettingsPage() {
 
         <div className="space-y-10">
           <section aria-labelledby="privacy-title">
-            <h2 id="privacy-title" className="font-display text-2xl">
-              Privacy
-            </h2>
-            <ul className="mt-3 space-y-2 text-[0.9375rem] text-ink-2">
-              <li>Your key never leaves this browser except inside requests to googleapis.com.</li>
-              <li>
-                It is never put in share links, history, downloaded JSON, page text, logs or error
-                messages.
-              </li>
-              <li>
-                The page address you test is sent to Google, which loads it from its own servers.
-              </li>
-              <li>No analytics, no trackers, no third-party scripts or fonts.</li>
+            <div className="flex items-center gap-3.5">
+              <span className="icon-tile" aria-hidden>
+                <ShieldCheck className="size-5" strokeWidth={1.9} />
+              </span>
+              <h2 id="privacy-title" className="font-display text-2xl">
+                Privacy
+              </h2>
+            </div>
+            <ul className="mt-4 space-y-2.5 text-[0.9375rem] text-ink-2">
+              {PRIVACY_POINTS.map((point) => (
+                <li key={point} className="flex gap-2.5">
+                  <Check className="mt-1 size-4 shrink-0 text-good" aria-hidden />
+                  <span>{point}</span>
+                </li>
+              ))}
             </ul>
           </section>
 
           <section aria-labelledby="data-title" className="plate p-5">
-            <h2 id="data-title" className="font-display text-2xl">
-              Your data
-            </h2>
+            <div className="flex items-center gap-3.5">
+              <span className="icon-tile" aria-hidden>
+                <Database className="size-5" strokeWidth={1.9} />
+              </span>
+              <h2 id="data-title" className="font-display text-2xl">
+                Your data
+              </h2>
+            </div>
             <p className="mt-1 text-[0.9375rem] text-ink-2">
               {history.length} saved run{history.length === 1 ? '' : 's'}
               {apiKey ? ', one API key' : ''}.
