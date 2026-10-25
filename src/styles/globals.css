@@ -1,0 +1,242 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme inline {
+  --color-panel: var(--panel);
+  --color-plate: var(--plate);
+  --color-well: var(--well);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-rule: var(--rule);
+  --color-edge: var(--edge);
+  --color-signal: var(--signal);
+  --color-signal-ink: var(--signal-ink);
+  --color-signal-soft: var(--signal-soft);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-poor: var(--poor);
+  --color-good-soft: var(--good-soft);
+  --color-warn-soft: var(--warn-soft);
+  --color-poor-soft: var(--poor-soft);
+
+  /* shadcn/ui token names, pointed at our palette */
+  --color-background: var(--panel);
+  --color-foreground: var(--ink);
+  --color-card: var(--plate);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--plate);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--signal);
+  --color-primary-foreground: var(--signal-ink);
+  --color-secondary: var(--well);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--well);
+  --color-muted-foreground: var(--ink-2);
+  --color-accent: var(--signal-soft);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: var(--poor);
+  --color-border: var(--rule);
+  --color-input: var(--edge);
+  --color-ring: var(--signal);
+
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Martian Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --radius-chip: 4px;
+  --radius-window: 6px;
+  --radius-control: 8px;
+  --radius-plate: 14px;
+
+  --text-2xs: 0.75rem;
+  --text-2xs--line-height: 1.4;
+}
+
+@layer base {
+  html {
+    background: var(--panel);
+    color: var(--ink);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme='light']) {
+      color-scheme: dark;
+    }
+  }
+
+  body {
+    min-height: 100dvh;
+    background: var(--panel);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    font-variation-settings: 'wdth' 100;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--signal-soft);
+    color: var(--ink);
+  }
+
+  a {
+    color: var(--signal);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    font-variation-settings: 'wdth' 85;
+    background: var(--well);
+    border-radius: 3px;
+    padding: 0.05em 0.3em;
+    overflow-wrap: anywhere;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Condensed Archivo for headings and instrument labels. */
+  .font-display {
+    font-family: var(--font-sans);
+    font-variation-settings: 'wdth' 75;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.08;
+  }
+  .font-label {
+    font-family: var(--font-sans);
+    font-variation-settings: 'wdth' 82;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-variation-settings: 'wdth' 87;
+    letter-spacing: -0.02em;
+  }
+  .num-narrow {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-variation-settings: 'wdth' 75;
+  }
+
+  .plate {
+    background: var(--plate);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-plate);
+  }
+  .well {
+    background: var(--well);
+    border-radius: var(--radius-window);
+    box-shadow: inset 0 1px 0 0 color-mix(in oklab, var(--ink) 10%, transparent);
+  }
+
+  /* Audit descriptions rendered by MarkdownLite. */
+  .prose-lite a {
+    overflow-wrap: anywhere;
+  }
+}
+
+@keyframes vl-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes vl-pop-in {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+.vl-fade[data-state='open'],
+.vl-fade[data-state='delayed-open'],
+.vl-fade[data-state='instant-open'] {
+  animation: vl-fade-in 140ms ease-out;
+}
+.vl-pop[data-state='open'] {
+  animation: vl-pop-in 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Loading dial: the needle hunts like a meter settling, the trace crawls, the readout blinks. */
+@keyframes vl-hunt {
+  0% {
+    transform: rotate(-100deg);
+  }
+  30% {
+    transform: rotate(70deg);
+  }
+  45% {
+    transform: rotate(35deg);
+  }
+  62% {
+    transform: rotate(95deg);
+  }
+  80% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(-100deg);
+  }
+}
+@keyframes vl-trace {
+  to {
+    stroke-dashoffset: -64;
+  }
+}
+@keyframes vl-blink {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.vl-hunt {
+  animation: vl-hunt 4.2s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+.vl-trace {
+  animation: vl-trace 2.4s linear infinite;
+}
+.vl-blink {
+  animation: vl-blink 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,72 @@
+/* Color tokens. See docs/DESIGN.md. Rating colors are reserved for ratings. */
+
+:root {
+  --panel: #e3e5e0;
+  --plate: #f5f6f3;
+  --well: #d5d9d3;
+  --ink: #1e252a;
+  --ink-2: #525c62;
+  --rule: #a9b0aa;
+  --edge: #7a847e;
+  --signal: #2a3fd1;
+  --signal-ink: #ffffff;
+  --signal-soft: #d6dbf7;
+  --bezel: #1e252a;
+
+  --good: #17663f;
+  --warn: #8a4b00;
+  --poor: #a92e26;
+  --good-soft: #cfe5d6;
+  --warn-soft: #f1dfc3;
+  --poor-soft: #f2d3cf;
+
+  --shadow-float: 0 12px 32px -12px rgb(20 26 30 / 0.35), 0 2px 6px -2px rgb(20 26 30 / 0.2);
+}
+
+:root[data-theme='dark'] {
+  --panel: #141a1e;
+  --plate: #1c2328;
+  --well: #0f1417;
+  --ink: #e4e8e5;
+  --ink-2: #9aa4a8;
+  --rule: #3a454c;
+  --edge: #6b777e;
+  --signal: #9aa8ff;
+  --signal-ink: #141a1e;
+  --signal-soft: #2a3364;
+  --bezel: #2e383f;
+
+  --good: #53c88f;
+  --warn: #f2a64a;
+  --poor: #ff8378;
+  --good-soft: #173628;
+  --warn-soft: #3d2c12;
+  --poor-soft: #44201d;
+
+  --shadow-float: 0 16px 40px -12px rgb(0 0 0 / 0.7), 0 2px 8px -2px rgb(0 0 0 / 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --panel: #141a1e;
+    --plate: #1c2328;
+    --well: #0f1417;
+    --ink: #e4e8e5;
+    --ink-2: #9aa4a8;
+    --rule: #3a454c;
+    --edge: #6b777e;
+    --signal: #9aa8ff;
+    --signal-ink: #141a1e;
+    --signal-soft: #2a3364;
+    --bezel: #2e383f;
+
+    --good: #53c88f;
+    --warn: #f2a64a;
+    --poor: #ff8378;
+    --good-soft: #173628;
+    --warn-soft: #3d2c12;
+    --poor-soft: #44201d;
+
+    --shadow-float: 0 16px 40px -12px rgb(0 0 0 / 0.7), 0 2px 8px -2px rgb(0 0 0 / 0.5);
+  }
+}
